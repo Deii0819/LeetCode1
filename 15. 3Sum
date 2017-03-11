@@ -5,12 +5,12 @@ public:
         sort(nums.begin(),nums.end());
         for(int i=0;i<nums.size();++i)
         {
-            int sum=-nums[i];
-            int front=i+1;
+            int sum=-nums[i];  // means 0-nums[i] 
+            int front=i+1;     //begin searching from index( i + 1 )
             int back=nums.size()-1;
             while(back>front)
             {
-                int two=nums[back]+nums[front];
+                int two=nums[back]+nums[front];    // 寻找两个数满足 two + sum = 0; 从front到back慢慢缩小范围( front++ 和 back-- )
                 if(two<sum)
                 {
                     front++;
@@ -20,17 +20,21 @@ public:
                     back--;
                 }
                 else 
+                // two == sum 此时 two - nums[i] = 0                   
                 {
-                    vector<int> tmp(3);
-                    tmp[0]=nums[i];
-                    tmp[1]=nums[front];
-                    tmp[2]=nums[back];
-                    res.push_back(tmp);
-                    front++;
-                    while(back>front && nums[front]==nums[front-1]) front++;
-                    while(back>front && back+1<nums.size() && nums[back]==nums[back+1]) back--;
-                }           
+                    vector<int> triplet({nums[i],nums[front],nums[back]});                   
+                    res.push_back(triplet);                  
+                    
+                    // when success !
+                    // 给出while循环,使得 front 和 front+1 不重复!
+                    while (front < back && nums[front] == triplet[1]) front++;
+                    
+                    // 给出while循环,使得 back 和 back-1 不重复
+                    while (front < back && nums[back] == triplet[2]) back--;          
+                 }                   
              }
+             
+             // 如果i+1和i相同,说明two相同,说明之前已经找过所有的two了,所以不用再找相同的i+1的two了
             while(i+1<nums.size() && nums[i]==nums[i+1]) i++;
         }
         return res;
