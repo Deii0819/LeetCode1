@@ -1,0 +1,15 @@
+N = 9 = 2^3 + 2^0 = 1001 in binary. Then:
+x^9 = x^(2^3) * x^(2^0)
+
+public class Solution {
+    public double MyPow(double x, int n) {
+        double ans = 1;
+        long absN = Math.Abs((long)n);
+        while(absN > 0) {
+            if((absN&1)==1) ans *= x;
+            absN >>= 1;
+            x *= x;
+        }
+        return n < 0 ?  1/ans : ans;
+    }
+}
