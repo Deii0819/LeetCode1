@@ -1,0 +1,37 @@
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        if(s.size() < 2)  return s;
+        int startInx = 0;
+        int lenth = 0;
+        for(int i=0; i<s.size(); ++i)
+        {
+            if(s[i] == s[i+1])  //even---example:("abba") ("cc")
+            {
+                IsPalindrome(s, i, i+1, startInx, lenth);
+            }
+            IsPalindrome(s, i, i, startInx, lenth); //再一次计算之"odd situation"---example:("ccc")("aba")
+            //special situation is "ccc", 
+            // "even situation:" -> if(s[i] == s[i+1]) { IsPalindrome(s, i, i+1, startInx, lenth); } 
+            //  "odd situation:" -> else { IsPalindrome(s, i, i, startInx, lenth); }       
+            //error: input("ccc") output("cc") expected("ccc") 
+        }
+        return s.substr(startInx, lenth);
+    }
+    
+    void IsPalindrome(string s, int left, int right, int& startInx, int& lenth)
+    {
+        int step = 1;
+        while((left - step) >= 0 && (right + step) < s.size())
+        {
+            if(s[left - step] != s[right + step])  break;
+            ++step;
+        }
+        int width = right - left + 2 * step - 1;
+        if(width > lenth)
+        {
+            lenth = width;
+            startInx = left - step + 1;
+        }
+    }
+};
