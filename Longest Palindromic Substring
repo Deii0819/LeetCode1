@@ -1,0 +1,42 @@
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        int maxRight = 0;
+        int pos = 0;
+        int maxlen = 0;
+        int maxlen_pos = 0;
+        string tmp = s;
+        
+        //使用string::iterator来做的话, 会产生error, 我想可能是因为string::iterator并不是适合拿来遍历string?
+        for(int i=0; i < tmp.size(); ++i)
+        {
+            tmp.insert(i, "#");
+            ++i;
+        }
+        tmp += '#';
+        int R[tmp.size()] = {0};//R[i] = 以i为对称中心的回文的长度.(i = 0~tmp.size() )
+        
+        for(int i = 0; i < tmp.size(); ++i)
+        {
+            int j = 2 * pos - i;  //j和i的对称轴就是pos, 意味着j是i以pos为对称轴翻转过去的那个位置
+            R[i] = i < maxRight ? ( min(R[j], maxRight-i) ) : 1 ;
+            
+            //这里有个小细节就是: 要先判断边界问题, 再判断是否相等. 
+            while(((i + R[i]) < tmp.size()) && ((i - R[i]) >= 0) && tmp[i+R[i]] == tmp[i-R[i]])
+                R[i] ++;
+
+            //更新maxRight和pos
+            if(i+R[i]-1 > maxRight)
+            {
+                maxRight = i+R[i]-1;
+                pos = i;
+            }
+            
+            //更新maxlen_pos和maxlen
+            maxlen_pos = maxlen > (R[i]) ? maxlen_pos : i;
+            maxlen = max(maxlen , R[i]);
+        }
+        //原来的第index位element, 由于加入了'#', 会变成第(2 * index + 1)位element
+        return s.substr( (maxlen_pos - maxlen + 1)/2, maxlen - 1);   
+     }
+};
