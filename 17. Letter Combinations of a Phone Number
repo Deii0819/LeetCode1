@@ -1,0 +1,41 @@
+class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+        vector<string> dic = { " ", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz" };
+        vector<string> res ;
+        if( digits.empty() )
+            return res;
+        res.push_back("");
+        for(int i = 0 ; i < digits.size(); ++i)
+        {
+            int n = res.size();
+            int d = digits[i] - '0';
+            for(int j = 0 ; j < n ; ++j)
+            {
+                string tmp = res.front();
+                res.erase(res.begin());
+                for(int k = 0 ; k < dic[d].size() ; ++k)
+                    res.push_back(tmp + dic[d][k]);
+            }
+        }
+        return res;
+    }
+};
+
+整体思路如下: 
+取个例子
+Input:Digit string "23"
+Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
+可以有
+a ×      先输入2对应的数字   
+b ×      
+c × 
+ad       发现目标stirng下一个是3, 那么给出tmp = front(), 并删除front() ,
+ae       迭代3所对应的数字,
+af       得到这三行.
+bd       然后在tmp = front() {因为之前已经删了a, 所以现在front()是b} , 并删除front(),
+be       迭代,
+bf       得到这三行.
+cd       同上.
+ce
+cf
