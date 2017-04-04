@@ -1,0 +1,33 @@
+it's just like 3Sum, but it's my first time beating over 95% , so mark it.
+
+
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        set<vector<int>> res;
+        if(nums.size() < 4)
+            return vector<vector<int>>();
+        sort(nums.begin(), nums.end());
+        int n = nums.size();
+        for(int i = 0 ; i < nums.size() - 3; ++i)
+        {
+            if(nums[i]+nums[i+1]+nums[i+2]+nums[i+3]>target) break;         //key point where accelerate
+            if(nums[i]+nums[n-3]+nums[n-2]+nums[n-1]<target) continue;      //key point where accelerate
+            for(int j = i + 1; j < nums.size() - 2; ++j)
+            {
+                if(nums[i]+nums[j]+nums[j+1]+nums[j+2]>target) break;       //key point
+                if(nums[i]+nums[j]+nums[n-2]+nums[n-1]<target) continue;    //key point
+                int left = j + 1;
+                int right = nums.size() - 1;
+                while( right > left)
+                {
+                    if(nums[i] + nums[j] + nums[left] + nums[right] == target)
+                        res.insert({nums[i] , nums[j], nums[left], nums[right]});
+                    nums[left] + nums[right] > target - nums[i] - nums[j] ? --right : ++left;
+                }
+            }
+        }
+        vector<vector<int>> res1(res.begin(), res.end());
+        return res1;
+    }
+};
