@@ -1,0 +1,23 @@
+//应用于combination和subset
+    void 深度优先搜索(vector<int> &nums, int level, vector<int> &out, vector<vector<int> > &res) {
+        res.push_back(out);
+        for (int i = level; i < nums.size(); ++i) {
+            out.push_back(nums[i]);
+            深度优先搜索(nums, i+1, out, res); // 我个人很容易忘记这个地方，在这里我们把第二个参数写成i+1而不是level+1，如果写成level+1，产生的结果
+            //就是下一次递归的时候把nums[1]给push_back到out里 也就是说产生{nums[2],nums[1], ...}这样的序列。
+            //当然也可能是nums[2]. 取决于level+1的值.
+            out.pop_back();
+        }
+    }
+    
+//应用于迷宫型数组的搜索
+bool f(int i, int j, int level, const vector<vector<char>>& board, string word, vector<vector<bool>>& visited){
+        if(level == word.size()) return true; //word是搜索的目标
+        if(i < 0 || j < 0 || i >= board.size() || j >= board[0].size() || visited[i][j] || board[i][j] != word[level]) return false;
+        visited[i][j] = true; // 为了每个元素只使用一次而创造的向量
+        bool res = f(i+1, j, level+1, board, word, visited) || f(i-1, j, level+1, board, word, visited)
+                || f(i, j+1, level+1, board, word, visited) || f(i, j-1, level+1, board, word, visited);
+               //对每一个元素的上下左右临近点作为新的开始, 进行搜索.
+        visited[i][j] = false;
+        return res;
+    }  //对迷宫中每一个元素进行搜索
