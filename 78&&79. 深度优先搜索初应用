@@ -13,11 +13,16 @@
 //应用于迷宫型数组的搜索
 bool f(int i, int j, int level, const vector<vector<char>>& board, string word, vector<vector<bool>>& visited){
         if(level == word.size()) return true; //word是搜索的目标
+        
         if(i < 0 || j < 0 || i >= board.size() || j >= board[0].size() || visited[i][j] || board[i][j] != word[level]) return false;
+        //上述代码 为return false 创造条件, 所有return false的条件都要写在这里
+        
         visited[i][j] = true; // 为了每个元素只使用一次而创造的向量
+        
         bool res = f(i+1, j, level+1, board, word, visited) || f(i-1, j, level+1, board, word, visited)
                 || f(i, j+1, level+1, board, word, visited) || f(i, j-1, level+1, board, word, visited);
                //对每一个元素的上下左右临近点作为新的开始, 进行搜索.
+               
         visited[i][j] = false;
         return res;
     }  //对迷宫中每一个元素进行搜索
