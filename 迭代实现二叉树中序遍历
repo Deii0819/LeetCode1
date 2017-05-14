@@ -1,0 +1,28 @@
+// Non-recursion
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode *root) {
+        vector<int> res;
+        stack<TreeNode*> s;
+        TreeNode *p = root;
+        while (p || !s.empty()) { //这个条件是非常重要的一点,当p有效或者栈里有元素时返回true
+            while (p) {
+                s.push(p);
+                p = p->left;
+            }
+            p = s.top();
+            s.pop();
+            res.push_back(p->val);
+            p = p->right;
+        }
+        return res;
+    }
+};
+
+主要思想就是在栈中记录左节点，
+直到栈顶节点的左节点是NULL之后，
+在res中加入栈顶节点的val，
+令p = 栈顶节点， 
+再把栈顶节点删除，
+令p = p->right
+继续在从tmp开始寻找其左节点并记录
